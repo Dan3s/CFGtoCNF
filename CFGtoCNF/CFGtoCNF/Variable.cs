@@ -11,6 +11,11 @@ namespace CFGtoCNF
         //En cada posicion una produccion de la forma aa ó AA ó aA ó A ó a ó lambda
         private  StringCollection  producciones;
 
+
+        public Variable() {
+            producciones = new StringCollection();
+        }
+
          public bool haveTerminal()
         {
 

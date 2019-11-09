@@ -24,7 +24,7 @@ namespace CFGtoCNF
          * S abc
          */
         private void addVariables(String key, String pro){
-            String[] cad = pro.Split("/");
+           String[] cad = pro.Split('/');
             for(int i = 0; i<cad.Length; i++){
                 //variables.Add(key, cad[i]);
             }
