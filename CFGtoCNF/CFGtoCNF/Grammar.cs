@@ -9,59 +9,131 @@ namespace CFGtoCNF
     class Grammar
     {
 
-        private Grammar actualGrammar;
-        private Dictionary<String,Variable> variables;
+        public Grammar actualGrammar;
+        public Dictionary<string, Variable> variables;
         
 
         public Grammar(){
-            variables = new Dictionary<String, Variable>();
-            actualGrammar = new Grammar();
+            variables = new Dictionary<string, Variable>();
+            //actualGrammar = new Grammar();
             
         }
 
-         /**
-         * Entrada de ejemplo
-         * S abc
-         */
-        private void addVariables(String key, String pro){
-           String[] cad = pro.Split('/');
-            for(int i = 0; i<cad.Length; i++){
-                //variables.Add(key, cad[i]);
+        /**
+        * Entrada de ejemplo
+        * S abc
+        */
+        public void addVariables(String key, String pro)
+        {
+            String[] cad = pro.Split('/');
+            Variable variable = new Variable();
+            for (int i = 0; i < cad.Length; i++)
+            {
+                variable.addProduction(cad[i]);
             }
-            
+            variables.Add(key, variable);
+
+        }
+
+        public void convertToCNF()
+        {
+
         }
 
         //T AL AN U
 
-        public Variable[] Terminales() {
-            Dictionary<String,String>  terminales1 = new Dictionary<String,String>();
-            Dictionary<String,String>  terminales2 = new Dictionary<String,String>();
-
-            //bool equal = terminales1.Keys.Count == terminales2.Keys.Count && terminales1.Keys.All(k => terminales2.ContainsKey(k) && object.Equals(terminales2[k], terminales1[k]));
- 
-            foreach(KeyValuePair<String, Variable> entry in variables)
+        public Dictionary<String, String> Terminales()
+        {
+            Dictionary<String, String> terminales1 = new Dictionary<String, String>();
+            Dictionary<String, String> terminales2 = new Dictionary<String, String>();
+            bool equal = false;
+            foreach (KeyValuePair<String, Variable> entry in variables)
             {
-                Variable vari = entry.Value;
-                if(vari.haveTerminal()){
+                
+                if (entry.Value.haveTerminal())
+                {
+                    
                     terminales1.Add(entry.Key, entry.Key);
                 }
-                if(vari.haveLambda()){
+                if (entry.Value.haveLambda())
+                {
+                    
                     terminales1.Add(entry.Key, entry.Key);
-                }
-            }
-            for (int i = 0; i< variables.Count; i++) {
-                for (int j = 0; j < variables.Count; j++) {
-                   // variables[i]
                 }
             }
 
-            return null;
+            while (!equal)
+            {
+                
+                foreach (KeyValuePair<String, String> entry in terminales1)
+                {
+                    String valor = entry.Value;
+                    if (!terminales2.ContainsKey(entry.Key))
+                    {
+                        terminales2.Add(entry.Key, entry.Key);
+                    }
+                        
+                    foreach (KeyValuePair<String, Variable> variable in variables)
+                    {
+                        
+                        if (variable.Value.canReach(valor))
+                        {
+                            
+                            if (!terminales2.ContainsKey(variable.Key))
+                            {
+                                
+                                terminales2.Add(variable.Key, variable.Key);
+                                
+                            }
+                            
+                        }
+                        
+                    }
+
+                    
+                }
+                equal = sameDictionary(terminales1, terminales2);
+                
+                terminales1 = new Dictionary<string, string>(terminales2);
+            }
+            return terminales2;
         }
+
+        public Dictionary<String, String> NoTerminales(Dictionary<String, String> terminales)
+        {
+            Dictionary<String, String> noTerminales = new Dictionary<string, string>();
+
+            return noTerminales;
+                
+                
+        }
+
+        public bool sameDictionary(Dictionary<String, String> terminales1, Dictionary<String, String> terminales2)
+        {
+            bool result = true;
+
+            if (terminales1.Count == terminales2.Count)
+            {
+                foreach (var key in terminales2.Keys)
+                {
+                    if (!(terminales1[key].Equals(terminales2[key])))
+                    {
+                        result = false;
+                    }
+
+                }
+            }
+            else
+            {
+                result = false;
+            }
+            return result;
+        }
+
+
+
        
 
-        
-
-      
 
 
 

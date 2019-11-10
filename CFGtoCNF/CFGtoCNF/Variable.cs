@@ -11,22 +11,69 @@ namespace CFGtoCNF
         //En cada posicion una produccion de la forma aa ó AA ó aA ó A ó a ó lambda
         private  StringCollection  producciones;
 
-
-        public Variable() {
+        public Variable()
+        {
             producciones = new StringCollection();
         }
+        public void addProduction(String pro)
+        {
+            producciones.Add(pro);
+        }
+        
+        public bool canReach(String valor)
+        {
+            bool result = false;
+            bool stop = false;
 
+            for (int i = 0; i < producciones.Count && !stop; i++)
+            {
+                for (int j = 0; j < producciones[i].Length && !stop; j++)
+                {
+                    
+                    
+                    String compa = producciones[i][j]+"";
+                    if (isBigLetter(producciones[i][j]) && compa.Equals(valor))
+                    {
+                        
+                        result = true;
+                        stop = true;
+                    }
+                }
+            }
+            return result;
+        }
          public bool haveTerminal()
         {
-
-            for (int i = 0; i < producciones.Count; i++)
+            bool result = false;
+            bool stop = false;
+            for (int i = 0; i < producciones.Count && !stop; i++)
             {
                 if (producciones[i].Length == 1 && isSmallLetter(producciones[i][0]))
                 {
-                    return true;
+                    
+                    result = true;
+                    stop = true;
+                }
+                else
+                {
+                    
+                    bool stop1 = false;
+                    for (int j = 0; j < producciones[i].Length && !stop1; j++)
+                    {
+                        
+                        if (isBigLetter(producciones[i][j]))
+                        {
+                            result = false;
+                            stop1 = true;
+                        }
+                        else
+                        {
+                            result = true; 
+                        }
+                    }
                 }
             }
-            return false;
+            return result;
         }
 
         //Anulables
