@@ -15,6 +15,11 @@ namespace CFGtoCNF
         {
             producciones = new StringCollection();
         }
+
+        public StringCollection GetProducciones()
+        {
+            return producciones;
+        }
         public void addProduction(String pro)
         {
             producciones.Add(pro);
@@ -50,6 +55,55 @@ namespace CFGtoCNF
                     }
                 }
             }
+            return result;
+        }
+        public bool haveAnulable(Dictionary<String, String> anulables)
+        {
+            bool result = false;
+            bool stop = false;
+            for (int i = 0; i < producciones.Count && !stop; i++)
+            {
+                if (producciones[i].Length == 1 && isBigLetter(producciones[i][0]))
+                {
+
+                    result = true;
+                    stop = true;
+                }
+                else
+                {
+                    bool stop1 = false;
+                    for (int j = 0; j < producciones[i].Length && !stop1; j++)
+                    {
+                       
+                        if (isSmallLetter(producciones[i][j]))
+                        {
+                            result = false;
+                            stop1 = true;
+                        }
+                        else
+                        {
+
+                            String compa = producciones[i][j] + "";
+                            if (anulables.ContainsKey(compa))
+                            {
+                                result = true;
+                            }
+                            else
+                            {
+                                result = false;
+                                stop1 = true;
+                            }
+                            
+                        }
+                    }
+                    if (result)
+                    {
+                        stop = true;
+                    }
+
+                }
+            }
+
             return result;
         }
          public bool haveTerminal()
@@ -111,7 +165,45 @@ namespace CFGtoCNF
                     unitarias.Add(""+producciones[i][0]);
                 }
             }
+
             return unitarias;
+        }
+        public StringCollection Unitarias(StringCollection unitarias)
+        {
+            
+
+            for (int i = 0; i < producciones.Count; i++)
+            {
+                if (producciones[i].Length == 1 && isBigLetter(producciones[i][0]))
+                {
+                    String compa = producciones[i][0] + "";
+                    if (!unitarias.Contains(compa))
+                    {
+                        unitarias.Add("" + producciones[i][0]);
+                    }
+                    
+                }
+            }
+
+            return unitarias;
+        }
+        public void ReemplazarUnitarias(String unitaria, Variable var)
+        {
+            for (int i = 0; i < producciones.Count; i++)
+            {
+                String compa = producciones[i][0] + "";
+                if (producciones[i].Length == 1 && isBigLetter(producciones[i][0]) && compa.Equals(unitaria))
+                {
+                    producciones.RemoveAt(i);
+                    
+                    for (int j = 0; j < var.GetProducciones().Count; j++)
+                    {
+                        producciones.Add(var.GetProducciones()[j]);
+                    }
+                    
+
+                }
+            }
         }
 
         //Alcanzables

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,14 +32,14 @@ namespace CFGtoCNF
             {
                 Console.Write(key+" ");
             }
-            Dictionary<String, String> noTerminales = g.NoTerminales(terminales);
+            Dictionary<String, String> noTerminales = g.NoTALA(terminales);
             Console.WriteLine("\nNo Terminales");
             foreach (String key in noTerminales.Keys)
             {
                 Console.Write(key + " ");
             }
             Console.WriteLine("\nNueva gramatica");
-            g.removerNoTerminales(noTerminales);
+            g.removerNoTALA(noTerminales);
             foreach (String key in g.getVariables().Keys)
             {
                 Console.Write(key + " ");
@@ -50,19 +51,68 @@ namespace CFGtoCNF
             {
                 Console.Write(key+" ");
             }
-            Dictionary<String, String> noAlcanzables = g.NoTerminales(alcanzables);
+            Dictionary<String, String> noAlcanzables = g.NoTALA(alcanzables);
             Console.WriteLine("\nNo Alcanzables");
             foreach (String key in noAlcanzables.Keys)
             {
                 Console.Write(key + " ");
             }
             Console.WriteLine("\nNueva gramatica");
-            g.removerNoTerminales(noAlcanzables);
+            g.removerNoTALA(noAlcanzables);
             foreach (String key in g.getVariables().Keys)
             {
                 Console.Write(key + " ");
             }
+            Console.WriteLine();
+            Dictionary<String, String> anulables = g.Anulables();
+            Console.WriteLine("Anulables");
+            foreach (String key in anulables.Keys)
+            {
+                Console.Write(key + " ");
+            }
 
+
+            g = new Grammar();
+            g.addVariables("S", "EA/SaBd/aEb");
+            g.addVariables("A", "DaD/bD/BEB");
+            g.addVariables("B", "bB/Ab/?");
+            g.addVariables("D", "aEb/ab");
+            g.addVariables("E", "aA/bB/?");
+            Console.WriteLine();
+            Dictionary<String, String> anulables2 = g.Anulables();
+            Console.WriteLine("Anulables");
+            foreach (String key in anulables2.Keys)
+            {
+                Console.Write(key + " ");
+            }
+
+            g = new Grammar();
+            g.addVariables("S", "Ba/A/?");
+            g.addVariables("A", "Aa/a");
+            g.addVariables("B", "bB/S");
+            Dictionary<String, StringCollection> unitarias = g.Unitarias();
+            Console.WriteLine();
+            Console.WriteLine("Unitarias");
+            foreach (KeyValuePair<String, StringCollection> unit in unitarias)
+            {
+                Console.WriteLine("Unitarias de: "+unit.Key);
+                for (int i = 0; i < unit.Value.Count; i++)
+                {
+                    Console.Write(unit.Value[i] + " ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            g.ReemplazarUnitarias(unitarias);
+            foreach (KeyValuePair<String, Variable> entry in g.getVariables())
+            {
+                Console.Write(entry.Key + "->");
+                for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
+                {
+                    Console.Write(entry.Value.GetProducciones()[i] + "/");
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

@@ -53,6 +53,10 @@ namespace CFGtoCNF
 
         //T AL AN U
 
+
+        /**
+         * Método para calcular las variables terminales
+         */
         public Dictionary<String, String> Terminales()
         {
             Dictionary<String, String> terminales1 = new Dictionary<String, String>();
@@ -109,8 +113,10 @@ namespace CFGtoCNF
             }
             return terminales2;
         }
-
-        public Dictionary<String, String> NoTerminales(Dictionary<String, String> terminales)
+        /**
+         * Método para saber cuáles variables son no Terminales, no Alcanzables o anulables de la gramática
+         */
+        public Dictionary<String, String> NoTALA(Dictionary<String, String> terminales)
         {
             Dictionary<String, String> noTerminales = new Dictionary<string, string>(letras);
             foreach (KeyValuePair<String, String> term in terminales)
@@ -122,8 +128,10 @@ namespace CFGtoCNF
             }
             return noTerminales;     
         }
-
-        public void removerNoTerminales(Dictionary<String, String> noTerminales)
+        /**
+         * Método para eliminar variables no Terminales, no Alcanzables o anulables de la gramática
+         */
+        public void removerNoTALA(Dictionary<String, String> noTerminales)
         {
             foreach (KeyValuePair<String, String> nTerm in noTerminales)
             {
@@ -139,7 +147,9 @@ namespace CFGtoCNF
 
             }
         }
-
+        /**
+        * Método para calcular las variables Alcanzables
+        */
         public Dictionary<String, String> Alcanzables()
         {
             Dictionary<String, String> alcanzables = new Dictionary<string, string>();
@@ -177,8 +187,129 @@ namespace CFGtoCNF
 
             return alcanzables2;
         }
+        /**
+        * Método para calcular las variables Alcanzables
+        */
+        public Dictionary<String, String> Anulables()
+        {
+            Dictionary<String, String> anulables = new Dictionary<string, string>();
+            Dictionary<String, String> anulables2 = new Dictionary<string, string>();
+            bool equal = false;
+            foreach (KeyValuePair<String, Variable> entry in variables)
+            {
+                if (entry.Value.haveLambda())
+                {
+                    anulables.Add(entry.Key, entry.Key);
+                }
+            }
+            
+            while (!equal)
+            {
 
-            public bool sameDictionary(Dictionary<String, String> terminales1, Dictionary<String, String> terminales2)
+
+                //if (!anulables2.ContainsKey(entry.Key))
+                //{
+                //    anulables2.Add(entry.Key, entry.Key);
+                //}
+                anulables2 = new Dictionary<string, string>(anulables);
+                    foreach (KeyValuePair<String, Variable> variable in variables)
+                    {
+                        
+                        if (variable.Value.haveAnulable(anulables))
+                        {
+                            if (!anulables2.ContainsKey(variable.Key))
+                            {
+                                
+                                anulables2.Add(variable.Key, variable.Key);
+                            }
+                            
+                        }
+                        //if (variable.Value.canReach(valor))
+                        //{
+
+                        //    if (!anulables2.ContainsKey(variable.Key))
+                        //    {
+
+                        //        anulables2.Add(variable.Key, variable.Key);
+
+                        //    }
+
+                        //}
+
+                    }
+
+
+                
+                equal = sameDictionary(anulables, anulables2);
+
+                anulables = new Dictionary<string, string>(anulables2);
+            }
+            return anulables;
+        }
+
+        public Dictionary<string, StringCollection> Unitarias()
+        {
+            Dictionary<string, StringCollection> unitarias = new Dictionary<string, StringCollection>();
+            bool equal = false;
+            foreach (KeyValuePair<String, Variable> variable in variables)
+            {
+                StringCollection unit = new StringCollection();
+                
+                unit = variable.Value.Unitarias();
+                
+                StringCollection unit2 = unit;
+                while (!equal)
+                {                    
+                    for (int i = 0; i < unit.Count; i++)
+                    {
+                        unit2 = variables[unit[i]].Unitarias(unit);
+                    }
+
+                    if (unit.Equals(unit2))
+                    {
+                        equal = true;
+                        unit = unit2;
+                    }
+                    else
+                    {
+                        unit = unit2;
+                    }
+                }
+                unit.Add(variable.Key);
+                unitarias.Add(variable.Key, unit);
+                
+            }
+
+
+
+            return unitarias;
+        }
+
+        public void ReemplazarUnitarias(Dictionary<string, StringCollection> unitarias)
+        {
+            foreach (KeyValuePair<String, Variable> variable in variables)
+            {
+                StringCollection unit = unitarias[variable.Key];
+                for (int i = 0; i < unit.Count; i++)
+                {
+                    variable.Value.ReemplazarUnitarias(unit[i], variables[unit[i]]);
+                }
+                    
+            }
+        }
+
+        public void imprimirDict(Dictionary<string, string> di)
+        {
+            Console.Write("Anulables: ");
+            foreach (KeyValuePair<String, string> variable in di)
+            {
+                Console.Write(variable.Key);
+            }
+            Console.WriteLine();
+
+        }
+
+        public bool sameDictionary(Dictionary<String, String> terminales1, Dictionary<String, String> terminales2)
         {
             bool result = true;
 
