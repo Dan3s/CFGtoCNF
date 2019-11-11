@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 
 
@@ -11,20 +12,30 @@ namespace CFGtoCNF
 
         public Grammar actualGrammar;
         public Dictionary<string, Variable> variables;
-        
+        public Dictionary<string, string> letras;
+
 
         public Grammar(){
             variables = new Dictionary<string, Variable>();
+            letras = new Dictionary<string, string>();
             //actualGrammar = new Grammar();
-            
+
         }
 
+        public Dictionary<string, Variable> getVariables()
+        {
+            return variables;
+        }
         /**
         * Entrada de ejemplo
         * S abc
         */
         public void addVariables(String key, String pro)
         {
+            if (!letras.ContainsKey(key))
+            {
+                letras.Add(key, key);
+            }
             String[] cad = pro.Split('/');
             Variable variable = new Variable();
             for (int i = 0; i < cad.Length; i++)
@@ -101,14 +112,73 @@ namespace CFGtoCNF
 
         public Dictionary<String, String> NoTerminales(Dictionary<String, String> terminales)
         {
-            Dictionary<String, String> noTerminales = new Dictionary<string, string>();
-
-            return noTerminales;
-                
-                
+            Dictionary<String, String> noTerminales = new Dictionary<string, string>(letras);
+            foreach (KeyValuePair<String, String> term in terminales)
+            {
+                noTerminales.Remove(term.Value);
+                //if (term.Value.Equals(noTerminales[term.Key])){
+                //    noTerminales.Remove(term.Value);
+                //}
+            }
+            return noTerminales;     
         }
 
-        public bool sameDictionary(Dictionary<String, String> terminales1, Dictionary<String, String> terminales2)
+        public void removerNoTerminales(Dictionary<String, String> noTerminales)
+        {
+            foreach (KeyValuePair<String, String> nTerm in noTerminales)
+            {
+                variables.Remove(nTerm.Key);
+            }
+            foreach (KeyValuePair<String, Variable> entry in variables)
+            {
+                foreach (KeyValuePair<String, String> nTerm in noTerminales)
+                {
+                    entry.Value.removerProduccion(nTerm.Value);
+                }
+                
+
+            }
+        }
+
+        public Dictionary<String, String> Alcanzables()
+        {
+            Dictionary<String, String> alcanzables = new Dictionary<string, string>();
+            Dictionary<String, String> alcanzables2 = new Dictionary<String, String>();
+            //S siempre va a ser alcanzable
+            alcanzables.Add("S", "S");
+            
+            bool equal = false;
+
+            while (!equal)
+            {
+
+                foreach (KeyValuePair<String, String> entry in alcanzables)
+                {
+                    String valor = entry.Value;
+                    if (!alcanzables2.ContainsKey(entry.Key))
+                    {
+                        alcanzables2.Add(entry.Key, entry.Key);
+                    }
+                    StringCollection alcan = variables[entry.Value].Reachables();
+                    for (int i = 0; i < alcan.Count; i++)
+                    {
+                        if (!alcanzables2.ContainsKey(alcan[i]))
+                        {
+                            alcanzables2.Add(alcan[i], alcan[i]);
+                        }
+                    }
+
+
+                }
+                equal = sameDictionary(alcanzables, alcanzables2);
+
+                alcanzables = new Dictionary<string, string>(alcanzables2);
+            }
+
+            return alcanzables2;
+        }
+
+            public bool sameDictionary(Dictionary<String, String> terminales1, Dictionary<String, String> terminales2)
         {
             bool result = true;
 

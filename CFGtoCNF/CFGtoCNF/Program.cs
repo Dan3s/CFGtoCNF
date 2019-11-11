@@ -26,11 +26,43 @@ namespace CFGtoCNF
             g.addVariables("E", "dcGGGG/cE");
             g.addVariables("G", "Gam");
             Dictionary<String, String> terminales = g.Terminales();
+            Console.WriteLine("Terminales");
             foreach (String key in terminales.Keys)
             {
-                Console.WriteLine(key);
+                Console.Write(key+" ");
             }
-                
+            Dictionary<String, String> noTerminales = g.NoTerminales(terminales);
+            Console.WriteLine("\nNo Terminales");
+            foreach (String key in noTerminales.Keys)
+            {
+                Console.Write(key + " ");
+            }
+            Console.WriteLine("\nNueva gramatica");
+            g.removerNoTerminales(noTerminales);
+            foreach (String key in g.getVariables().Keys)
+            {
+                Console.Write(key + " ");
+            }
+            Console.WriteLine();
+            Dictionary<String, String> alcanzables = g.Alcanzables();
+            Console.WriteLine("Alcanzables");
+            foreach (String key in alcanzables.Keys)
+            {
+                Console.Write(key+" ");
+            }
+            Dictionary<String, String> noAlcanzables = g.NoTerminales(alcanzables);
+            Console.WriteLine("\nNo Alcanzables");
+            foreach (String key in noAlcanzables.Keys)
+            {
+                Console.Write(key + " ");
+            }
+            Console.WriteLine("\nNueva gramatica");
+            g.removerNoTerminales(noAlcanzables);
+            foreach (String key in g.getVariables().Keys)
+            {
+                Console.Write(key + " ");
+            }
+
         }
     }
 }

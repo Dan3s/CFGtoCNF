@@ -19,7 +19,17 @@ namespace CFGtoCNF
         {
             producciones.Add(pro);
         }
-        
+
+        public void removerProduccion(String eliminar)
+        {
+            for (int i = 0; i < producciones.Count; i++)
+            {
+                if(producciones[i].Contains(eliminar))
+                {
+                    producciones.RemoveAt(i);
+                }
+            }
+        }
         public bool canReach(String valor)
         {
             bool result = false;
