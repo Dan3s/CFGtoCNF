@@ -153,6 +153,37 @@ namespace CFGtoCNF
             return false;
         }
 
+        public void replaceByOneAnulable(String anulable) {
+            for (int i = 0; i < producciones.Count; i++) {
+                for (int j = 0; j < producciones[i].Length; j++) { 
+                if (producciones[i][j].Equals(anulable)) {
+                        string nuevaProduccion = producciones[i].Insert(j, "");
+
+                        if (producciones[i].Equals(nuevaProduccion))
+                        {
+                            continue;
+                        }
+                        else {
+                            producciones.Add(nuevaProduccion);
+                        }
+                }
+                }
+            }
+        }
+
+        public void replaceAllAnulables(StringCollection anulables) {
+            string produccionSinAnulables = "";
+            for (int i = 0; i < producciones.Count; i++) {
+                produccionSinAnulables = producciones[i];
+                for (int j = 0; j < produccionSinAnulables.Length; j++) {
+                    if (anulables.Contains(""+ produccionSinAnulables[j]) ){
+                        produccionSinAnulables.Insert(j, "");
+                    }
+                }
+                
+            } 
+        }
+
         //Unitarias
         public StringCollection Unitarias()
         {

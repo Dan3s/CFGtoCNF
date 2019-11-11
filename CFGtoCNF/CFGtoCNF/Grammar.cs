@@ -247,6 +247,21 @@ namespace CFGtoCNF
             return anulables;
         }
 
+        //en cada posicon del stringcollection anulables una Key de una Anulable
+        public void replaceAnulables(StringCollection anulables) {
+            foreach (KeyValuePair<String, Variable> variable in variables) {
+                for (int i= 0; i < anulables.Count; i++) { 
+                if (variable.Value.canReach(anulables[i])) {
+                        variable.Value.replaceByOneAnulable(anulables[i]);
+
+                }
+
+                }
+            }
+
+
+        }
+
         public Dictionary<string, StringCollection> Unitarias()
         {
             Dictionary<string, StringCollection> unitarias = new Dictionary<string, StringCollection>();
