@@ -9,7 +9,7 @@ namespace CFGtoCNF
     class Variable
     {
         //En cada posicion una produccion de la forma aa ó AA ó aA ó A ó a ó lambda
-        private  StringCollection  producciones;
+        public  StringCollection  producciones;
 
         public Variable()
         {
@@ -156,9 +156,10 @@ namespace CFGtoCNF
         public void replaceByOneAnulable(String anulable) {
             for (int i = 0; i < producciones.Count; i++) {
                 for (int j = 0; j < producciones[i].Length; j++) { 
-                if (producciones[i][j].Equals(anulable)) {
+                if ((""+producciones[i][j]).Equals(anulable)) {
+                  
                         string nuevaProduccion = producciones[i].Insert(j, "");
-
+                        Console.WriteLine(nuevaProduccion);
                         if (producciones[i].Equals(nuevaProduccion))
                         {
                             continue;
@@ -171,17 +172,27 @@ namespace CFGtoCNF
             }
         }
 
-        public void replaceAllAnulables(StringCollection anulables) {
-            string produccionSinAnulables = "";
+        public void replaceAllAnulables(String anulables) {
+            string produccion = "";
+            string pro = producciones.ToString();
             for (int i = 0; i < producciones.Count; i++) {
-                produccionSinAnulables = producciones[i];
-                for (int j = 0; j < produccionSinAnulables.Length; j++) {
-                    if (anulables.Contains(""+ produccionSinAnulables[j]) ){
-                        produccionSinAnulables.Insert(j, "");
+                produccion = producciones[i];
+                for (int j = 0; j < produccion.Length; j++) {
+                    for (int z = 0; z < anulables.Length; z++) {
+                        if (anulables[z].ToString().Equals(produccion[j])) {
+                            produccion.Insert(j, "");
+                        }
                     }
+
+
+                    
                 }
                 
-            } 
+            }
+
+            if (!producciones.Contains(produccion)) {
+                addProduction(produccion);
+            }
         }
 
         //Unitarias
@@ -291,30 +302,39 @@ namespace CFGtoCNF
             }
 
         }
-		
-	//public static void Main()
-	//{
-	//	Console.WriteLine(isBigLetter('P'));
-	//	producciones = new StringCollection();
-	//	producciones.Add("ABC");
-	//	producciones.Add("BaC");
-	//	producciones.Add("aB");
-	//	producciones.Add("F");
-	//	producciones.Add("a");
-	//	producciones.Add("P");
-	//	producciones.Add("q");
-	//	Console.WriteLine(producciones.Count);
-	//	StringCollection bal = Reachables();
-	//	StringCollection lab = Unitarias();
-		
-	//	//for(int i = 0; i < bal.Count; i++){
-	//	//	Console.WriteLine(bal[i]);
-	//	//}
-	//	for(int i = 0; i < lab.Count; i++){
-	//		Console.WriteLine(lab[i]);
-	//	}
-		
-	//}
+
+  //      public static void Main()
+  //      {
+  //          //	Console.WriteLine(isBigLetter('P'));
+  //      Variable va = new Variable();
+  //      va.producciones = new StringCollection();
+  //      va.producciones.Add("B");
+		//va.producciones.Add("C");
+		//va.producciones.Add("B");
+  //          va.replaceByOneAnulable("B");
+  //          va.replaceByOneAnulable("C");
+  //          va.replaceByOneAnulable("B");
+  //          for (int i = 0; i < va.producciones.Count; i++) {
+  //              Console.WriteLine(va.producciones[i]);
+  //          }
+  //          Console.ReadKey();
+            
+  //          //va.producciones.Add("F");
+  //          //va.producciones.Add("a");
+  //          //va.producciones.Add("P");
+  //          //va.producciones.Add("q");
+  //          //	Console.WriteLine(producciones.Count);
+  //          //	StringCollection bal = Reachables();
+  //          //	StringCollection lab = Unitarias();
+
+  //          //	//for(int i = 0; i < bal.Count; i++){
+  //          //	//	Console.WriteLine(bal[i]);
+  //          //	//}
+  //          //	for(int i = 0; i < lab.Count; i++){
+  //          //		Console.WriteLine(lab[i]);
+  //          //	}
+
+  //      }
 
     }
 }

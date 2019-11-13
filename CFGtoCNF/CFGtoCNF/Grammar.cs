@@ -247,6 +247,15 @@ namespace CFGtoCNF
             return anulables;
         }
 
+        public string anulablesKeys(Dictionary<string, string>anulables) {
+            string anulablesKeys = "";
+            foreach (KeyValuePair<String, Variable> variable in variables) {
+                anulablesKeys += variable.Key;
+            
+            }
+            return anulablesKeys;
+        }
+
         //en cada posicon del stringcollection anulables una Key de una Anulable
         public void replaceAnulables(StringCollection anulables) {
             foreach (KeyValuePair<String, Variable> variable in variables) {
@@ -258,6 +267,12 @@ namespace CFGtoCNF
 
                 }
             }
+            foreach (KeyValuePair<String, Variable> variable in variables)
+            {
+                variable.Value.replaceAllAnulables(anulablesKeys(Anulables()));
+            }
+
+
 
 
         }
