@@ -10,15 +10,19 @@ namespace CFGtoCNF
 {
     static class Program
     {
+
+        static Grammar g = new Grammar();
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
+
+            Grammar g = new Grammar();
 
             //Grammar g = new Grammar();
             //g.addVariables("S", "aAb/cEB/CG");
@@ -115,51 +119,53 @@ namespace CFGtoCNF
             //    Console.WriteLine();
             //}
             // Console.WriteLine("hola");
-            // Grammar g = new Grammar();
-            // g.addVariables("S", "BCB");
-            // g.addVariables("A", "aA/ab");
-            // g.addVariables("B", "bBa/A/DC");
-            // g.addVariables("C", "aCb/D/b");
-            // g.addVariables("D", "aB/?");
+            //----------------------------------------------
+            //
+            //g.addVariables("S", "BCB");
+            //g.addVariables("A", "aA/ab");
+            //g.addVariables("B", "bBa/A/DC");
+            //g.addVariables("C", "aCb/D/b");
+            //g.addVariables("D", "aB/?");
             //// string anulables = g.anulablesKeys(g.Anulables());
-            // //Console.WriteLine(anulables);
-            // StringCollection anulabless = new StringCollection();
-            // anulabless.Add("D");
-            // anulabless.Add("B");
-            // anulabless.Add("C");
-            // anulabless.Add("S");
-            // g.replaceAnulables(anulabless);
-            // foreach (KeyValuePair<String, Variable> entry in g.getVariables())
-            // {
-            //     Console.Write(entry.Key + "->");
-            //     for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
-            //     {
-            //         Console.Write(entry.Value.GetProducciones()[i] + "/");
-            //     }
-            //     Console.WriteLine();
-            // }
-            // Console.ReadKey();
+            ////Console.WriteLine(anulables);
+            //string anulabless = g.anulablesKeys(g.Anulables());
+            ////anulabless.Add("D");
+            ////anulabless.Add("B");
+            ////anulabless.Add("C");
+            ////anulabless.Add("S");
+            //g.replaceAnulables(anulabless);
+            //foreach (KeyValuePair<String, Variable> entry in g.getVariables())
+            //{
+            //    Console.Write(entry.Key + "->");
+            //    for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
+            //    {
+            //        Console.Write(entry.Value.GetProducciones()[i] + "/");
+            //    }
+            //    Console.WriteLine();
+            //}
+            //Console.ReadKey();
+            //----------------------------------------------------------
 
-            Variable va = new Variable();
-            va.producciones = new StringCollection();
-           // va.producciones.Add("BCB");
-            va.producciones.Add("BCB");
-            va.producciones.Add("aA/ab");
-            va.producciones.Add("bBa/A/DC");
-            va.producciones.Add("aCb/D/b");
-            va.producciones.Add("aB/?");
+            // Variable va = new Variable();
+            // va.producciones = new StringCollection();
+            //// va.producciones.Add("BCB");
+            // va.producciones.Add("BCB");
+            // va.producciones.Add("aA/ab");
+            // va.producciones.Add("bBa/A/DC");
+            // va.producciones.Add("aCb/D/b");
+            // va.producciones.Add("aB/?");
 
-            va.replaceByOneAnulable("D");
-            va.replaceByOneAnulable("B");
-            va.replaceByOneAnulable("C");
-            va.replaceByOneAnulable("S");
-          
+            // va.replaceByOneAnulable("D");
+            // va.replaceByOneAnulable("B");
+            // va.replaceByOneAnulable("C");
+            // va.replaceByOneAnulable("S");
+
             //va.replaceByOneAnulable("C");
             //va.replaceByOneAnulable("B");
-            for (int i = 0; i < va.producciones.Count; i++)
-            {
-                Console.WriteLine(va.producciones[i]);
-            }
+            //for (int i = 0; i < va.producciones.Count; i++)
+            //{
+            //    Console.WriteLine(va.producciones[i]);
+            //}
             //StringBuilder hola = new StringBuilder("hola");
 
             //hola.Remove(0,1);
@@ -171,7 +177,7 @@ namespace CFGtoCNF
             ////arra[2] = '';
 
             //Console.WriteLine(a.Remove(1,1));
-            Console.ReadKey();
+            //Console.ReadKey();
 
 
 

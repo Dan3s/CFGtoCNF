@@ -249,28 +249,28 @@ namespace CFGtoCNF
 
         public string anulablesKeys(Dictionary<string, string>anulables) {
             string anulablesKeys = "";
-            foreach (KeyValuePair<String, Variable> variable in variables) {
-                anulablesKeys += variable.Key;
+            foreach (KeyValuePair<String, string> anulable in anulables) {
+                anulablesKeys += anulable.Key;
             
             }
             return anulablesKeys;
         }
 
         //en cada posicon del stringcollection anulables una Key de una Anulable
-        public void replaceAnulables(StringCollection anulables) {
+        public void replaceAnulables(string anulables) {
             foreach (KeyValuePair<String, Variable> variable in variables) {
-                for (int i= 0; i < anulables.Count; i++) { 
-                if (variable.Value.canReach(anulables[i])) {
-                        variable.Value.replaceByOneAnulable(anulables[i]);
+                for (int i= 0; i < anulables.Length; i++) { 
+                if (variable.Value.canReach(anulables[i].ToString())) {
+                        variable.Value.replaceByOneAnulable(anulables[i].ToString());
 
                 }
 
                 }
             }
-            foreach (KeyValuePair<String, Variable> variable in variables)
-            {
-                variable.Value.replaceAllAnulables(anulablesKeys(Anulables()));
-            }
+            //foreach (KeyValuePair<String, Variable> variable in variables)
+            //{
+            //    variable.Value.replaceAllAnulables(anulablesKeys(Anulables()));
+            //}
 
 
 

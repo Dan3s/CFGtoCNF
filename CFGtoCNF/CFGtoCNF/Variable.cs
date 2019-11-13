@@ -195,15 +195,14 @@ namespace CFGtoCNF
             for (int i = 0; i < producciones.Count; i++) {
                 for (int j = 0; j < producciones[i].Length; j++) {
                     String compa = producciones[i][j] + "";
-                    if (compa.Equals(anulable)) {
-                        //String nProduccion = producciones[i];
-                        //nProduccion.Remove(j, j + 1);
+                    if (compa.Equals(anulable)||compa.Equals("?")) {
+                        
                         StringBuilder nuevaProduccion = new StringBuilder(producciones[i].Remove(j,1));
                         nuevaProduccion.Insert(j, "");
 
 
                         
-                        if (!producciones.Contains(nuevaProduccion.ToString()))
+                        if (!producciones.Contains(nuevaProduccion.ToString()) || !(nuevaProduccion.Equals(anulable)))
                         {
                             producciones.Add(nuevaProduccion.ToString());
 
@@ -211,6 +210,11 @@ namespace CFGtoCNF
                        
                             
                         
+                    }
+                    if (compa.Equals(" ")) {
+                        StringBuilder nuevaProduccion = new StringBuilder(producciones[i].Remove(j, 1));
+                        nuevaProduccion.Insert(j, "?");
+
                     }
                 }
             }
