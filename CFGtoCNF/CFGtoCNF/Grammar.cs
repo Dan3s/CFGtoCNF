@@ -361,6 +361,11 @@ namespace CFGtoCNF
             return result;
         }
 
+        public void GramaticaFinal()
+        {
+            StringCollection minusculasActuales = new StringCollection();
+
+        }
 
 
        

@@ -9,11 +9,16 @@ namespace CFGtoCNF
     class Variable
     {
         //En cada posicion una produccion de la forma aa ó AA ó aA ó A ó a ó lambda
-        public  StringCollection  producciones;
+        private  StringCollection  producciones;
+        //Diccionario de minusculas que se van a usar para reemplazar las terminales en la gramática final
+        //Va desde n(110) hasta z(122)
+        //La llave es la minuscula antigua y el valor la nueva
+        private Dictionary<char, char> minusculasReemplazar;
 
         public Variable()
         {
             producciones = new StringCollection();
+            minusculasReemplazar = new Dictionary<char, char>();
         }
 
         public StringCollection GetProducciones()
@@ -23,6 +28,39 @@ namespace CFGtoCNF
         public void addProduction(String pro)
         {
             producciones.Add(pro);
+        }
+
+        public void llenarMinusculas()
+        {
+            for (int i = 97; i <= 109; i++)
+            {
+                char key = (char)i;
+                char value = (char)(i + 13);
+                minusculasReemplazar.Add(key, value);
+            }
+        }
+
+        public StringCollection buscarMinisculas(StringCollection minusculasActuales)
+        {
+
+            for (int i = 0; i < producciones.Count; i++)
+            {
+                if (producciones[i].Length > 1)
+                {
+                    for (int j = 0; j < producciones[i].Length; j++)
+                    {
+                        if (isSmallLetter(producciones[i][j]) && !minusculasActuales.Contains(producciones[i][j] + ""))
+                        {
+                            minusculasActuales.Add(producciones[i][j] + "");
+                        }
+                    }
+                }
+                
+            }
+            
+                
+            return minusculasActuales;
+
         }
 
         public void removerProduccion(String eliminar)
@@ -156,10 +194,9 @@ namespace CFGtoCNF
         public void replaceByOneAnulable(String anulable) {
             for (int i = 0; i < producciones.Count; i++) {
                 for (int j = 0; j < producciones[i].Length; j++) { 
-                if ((""+producciones[i][j]).Equals(anulable)) {
-                  
+                if (producciones[i][j].Equals(anulable)) {
                         string nuevaProduccion = producciones[i].Insert(j, "");
-                        Console.WriteLine(nuevaProduccion);
+
                         if (producciones[i].Equals(nuevaProduccion))
                         {
                             continue;
@@ -172,27 +209,17 @@ namespace CFGtoCNF
             }
         }
 
-        public void replaceAllAnulables(String anulables) {
-            string produccion = "";
-            string pro = producciones.ToString();
+        public void replaceAllAnulables(StringCollection anulables) {
+            string produccionSinAnulables = "";
             for (int i = 0; i < producciones.Count; i++) {
-                produccion = producciones[i];
-                for (int j = 0; j < produccion.Length; j++) {
-                    for (int z = 0; z < anulables.Length; z++) {
-                        if (anulables[z].ToString().Equals(produccion[j])) {
-                            produccion.Insert(j, "");
-                        }
+                produccionSinAnulables = producciones[i];
+                for (int j = 0; j < produccionSinAnulables.Length; j++) {
+                    if (anulables.Contains(""+ produccionSinAnulables[j]) ){
+                        produccionSinAnulables.Insert(j, "");
                     }
-
-
-                    
                 }
                 
-            }
-
-            if (!producciones.Contains(produccion)) {
-                addProduction(produccion);
-            }
+            } 
         }
 
         //Unitarias
@@ -289,10 +316,11 @@ namespace CFGtoCNF
 
         //Minusculas/terminables
         // Lambda es '?'
+        //Las letras minusculas van desde a(97) hasta m(109)
         public bool isSmallLetter(char digit)
         {
 
-            if ((digit >= 97 && digit <= 122)|| digit == 63)
+            if ((digit >= 97 && digit <= 109)|| digit == 63)
             {
                 return true;
             }
@@ -302,39 +330,30 @@ namespace CFGtoCNF
             }
 
         }
-
-  //      public static void Main()
-  //      {
-  //          //	Console.WriteLine(isBigLetter('P'));
-  //      Variable va = new Variable();
-  //      va.producciones = new StringCollection();
-  //      va.producciones.Add("B");
-		//va.producciones.Add("C");
-		//va.producciones.Add("B");
-  //          va.replaceByOneAnulable("B");
-  //          va.replaceByOneAnulable("C");
-  //          va.replaceByOneAnulable("B");
-  //          for (int i = 0; i < va.producciones.Count; i++) {
-  //              Console.WriteLine(va.producciones[i]);
-  //          }
-  //          Console.ReadKey();
-            
-  //          //va.producciones.Add("F");
-  //          //va.producciones.Add("a");
-  //          //va.producciones.Add("P");
-  //          //va.producciones.Add("q");
-  //          //	Console.WriteLine(producciones.Count);
-  //          //	StringCollection bal = Reachables();
-  //          //	StringCollection lab = Unitarias();
-
-  //          //	//for(int i = 0; i < bal.Count; i++){
-  //          //	//	Console.WriteLine(bal[i]);
-  //          //	//}
-  //          //	for(int i = 0; i < lab.Count; i++){
-  //          //		Console.WriteLine(lab[i]);
-  //          //	}
-
-  //      }
+		
+	//public static void Main()
+	//{
+	//	Console.WriteLine(isBigLetter('P'));
+	//	producciones = new StringCollection();
+	//	producciones.Add("ABC");
+	//	producciones.Add("BaC");
+	//	producciones.Add("aB");
+	//	producciones.Add("F");
+	//	producciones.Add("a");
+	//	producciones.Add("P");
+	//	producciones.Add("q");
+	//	Console.WriteLine(producciones.Count);
+	//	StringCollection bal = Reachables();
+	//	StringCollection lab = Unitarias();
+		
+	//	//for(int i = 0; i < bal.Count; i++){
+	//	//	Console.WriteLine(bal[i]);
+	//	//}
+	//	for(int i = 0; i < lab.Count; i++){
+	//		Console.WriteLine(lab[i]);
+	//	}
+		
+	//}
 
     }
 }
