@@ -46,16 +46,14 @@ namespace CFGtoCNF
 
         }
 
-        public void convertToCNF()
-        {
-
-        }
+        
 
         //T AL AN U
 
 
         /**
          * Método para calcular las variables terminales
+         * Usa 2 diccionarios y repite los ciclos hasta que los 2 diccionarios sea iguales
          */
         public Dictionary<String, String> Terminales()
         {
@@ -115,6 +113,7 @@ namespace CFGtoCNF
         }
         /**
          * Método para saber cuáles variables son no Terminales, no Alcanzables o anulables de la gramática
+         * Usa 2 diccionarios y repite los ciclos hasta que los 2 diccionarios sea iguales
          */
         public Dictionary<String, String> NoTALA(Dictionary<String, String> terminales)
         {
@@ -149,6 +148,7 @@ namespace CFGtoCNF
         }
         /**
         * Método para calcular las variables Alcanzables
+        * Usa 2 diccionarios y repite los ciclos hasta que los 2 diccionarios sea iguales
         */
         public Dictionary<String, String> Alcanzables()
         {
@@ -189,6 +189,7 @@ namespace CFGtoCNF
         }
         /**
         * Método para calcular las variables Alcanzables
+        
         */
         public Dictionary<String, String> Anulables()
         {
@@ -246,7 +247,9 @@ namespace CFGtoCNF
             }
             return anulables;
         }
-
+        /**
+         * Convierte el diccionario de anuables en  un string
+         */
         public string anulablesKeys(Dictionary<string, string>anulables) {
             string anulablesKeys = "";
             foreach (KeyValuePair<String, string> anulable in anulables) {
@@ -255,7 +258,9 @@ namespace CFGtoCNF
             }
             return anulablesKeys;
         }
-
+        /**
+         * Reemplaza las producciones anulables por las combinaciones de ellas
+         */
         //en cada posicon del stringcollection anulables una Key de una Anulable
         public void replaceAnulables(string anulables) {
             foreach (KeyValuePair<String, Variable> variable in variables) {
@@ -276,7 +281,10 @@ namespace CFGtoCNF
 
 
         }
-
+        /**
+        * Método para calcular las variables Unitarias
+        * Usa 2 diccionarios y repite los ciclos hasta que los 2 diccionarios sea iguales
+        */
         public Dictionary<string, StringCollection> Unitarias()
         {
             Dictionary<string, StringCollection> unitarias = new Dictionary<string, StringCollection>();
@@ -314,7 +322,9 @@ namespace CFGtoCNF
 
             return unitarias;
         }
-
+        /**
+         * Reemplaza las producciones unitarias en la gramática
+         */
         public void ReemplazarUnitarias(Dictionary<string, StringCollection> unitarias)
         {
             foreach (KeyValuePair<String, Variable> variable in variables)
@@ -338,7 +348,9 @@ namespace CFGtoCNF
             Console.WriteLine();
 
         }
-
+        /**
+         * Método para saber cuando los dos diccionarios son iguales
+         */
         public bool sameDictionary(Dictionary<String, String> terminales1, Dictionary<String, String> terminales2)
         {
             bool result = true;

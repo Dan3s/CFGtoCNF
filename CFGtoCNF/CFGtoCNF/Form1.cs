@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -17,6 +18,7 @@ namespace CFGtoCNF
         public Form1()
         {
             InitializeComponent();
+            textBox1.Text = "Gramática Original\n";
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -29,15 +31,65 @@ namespace CFGtoCNF
             Dictionary<String, String> terminales = g.Terminales();
 
             Dictionary<String, String> noTerminales = g.NoTALA(terminales);
+            
 
             g.removerNoTALA(noTerminales);
+            textBox1.Text += "Gramática Terminal\n";
+            foreach (KeyValuePair<String, Variable> entry in g.getVariables())
+            {
+                textBox1.Text += (entry.Key + "->");
+                for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
+                {
+                    textBox1.Text += (entry.Value.GetProducciones()[i] + "/");
+                }
+                textBox1.Text += "\n";
+            }
 
-            textBox1.AppendText(leerGramatica().ToString());
+            Dictionary<String, String> alcanzables = g.Alcanzables();
+            Dictionary<String, String> noAlcanzables = g.NoTALA(alcanzables);
+            g.removerNoTALA(noAlcanzables);
+            textBox1.Text += "Gramática Alcanzable\n";
+            foreach (KeyValuePair<String, Variable> entry in g.getVariables())
+            {
+                textBox1.Text += (entry.Key + "->");
+                for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
+                {
+                    textBox1.Text += (entry.Value.GetProducciones()[i] + "/");
+                }
+                textBox1.Text += "\n";
+            }
 
-            textBox1.AppendText("\r\n");
+            string anulabless = g.anulablesKeys(g.Anulables());
+            g.replaceAnulables(anulabless);
+            textBox1.Text += "Gramática Anulable\n";
+            foreach (KeyValuePair<String, Variable> entry in g.getVariables())
+            {
+                textBox1.Text += (entry.Key + "->");
+                for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
+                {
+                    textBox1.Text += (entry.Value.GetProducciones()[i] + "/");
+                }
+                textBox1.Text += "\n";
+            }
+
+            Dictionary<String, StringCollection> unitarias = g.Unitarias();
+            g.ReemplazarUnitarias(unitarias);
+            textBox1.Text += "Gramática Unitaria\n";
+            foreach (KeyValuePair<String, Variable> entry in g.getVariables())
+            {
+                textBox1.Text += (entry.Key + "->");
+                for (int i = 0; i < entry.Value.GetProducciones().Count; i++)
+                {
+                    textBox1.Text += (entry.Value.GetProducciones()[i] + "/");
+                }
+                textBox1.Text += "\n";
+            }
+            //textBox1.Text += leerGramatica().ToString() + Environment.NewLine;
+
+            //textBox1.AppendText("\r\n");
 
 
-            
+
         }
 
         private StringBuilder leerGramatica() {
@@ -68,9 +120,12 @@ namespace CFGtoCNF
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string [] data = getEntrada(textBox2.Text);
+            string produc = textBox2.Text;
+            string [] data = getEntrada(produc);
+            textBox1.Text += produc+"\n";
             g.addVariables(data[0], data[1]);
-            textBox1.ResetText();
+            textBox2.Text = "";
+            //textBox1.ResetText();
             
         }
 
@@ -88,6 +143,11 @@ namespace CFGtoCNF
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox2.Text = "";
         }
     }
 }

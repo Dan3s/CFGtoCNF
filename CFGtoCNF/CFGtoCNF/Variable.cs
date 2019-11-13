@@ -29,40 +29,42 @@ namespace CFGtoCNF
         {
             producciones.Add(pro);
         }
+        //no usado
+        //public void llenarMinusculas()
+        //{
+        //    for (int i = 97; i <= 109; i++)
+        //    {
+        //        char key = (char)i;
+        //        char value = (char)(i + 13);
+        //        minusculasReemplazar.Add(key, value);
+        //    }
+        //}
+        ////no usado
+        //public StringCollection buscarMinisculas(StringCollection minusculasActuales)
+        //{
 
-        public void llenarMinusculas()
-        {
-            for (int i = 97; i <= 109; i++)
-            {
-                char key = (char)i;
-                char value = (char)(i + 13);
-                minusculasReemplazar.Add(key, value);
-            }
-        }
-
-        public StringCollection buscarMinisculas(StringCollection minusculasActuales)
-        {
-
-            for (int i = 0; i < producciones.Count; i++)
-            {
-                if (producciones[i].Length > 1)
-                {
-                    for (int j = 0; j < producciones[i].Length; j++)
-                    {
-                        if (isSmallLetter(producciones[i][j]) && !minusculasActuales.Contains(producciones[i][j] + ""))
-                        {
-                            minusculasActuales.Add(producciones[i][j] + "");
-                        }
-                    }
-                }
+        //    for (int i = 0; i < producciones.Count; i++)
+        //    {
+        //        if (producciones[i].Length > 1)
+        //        {
+        //            for (int j = 0; j < producciones[i].Length; j++)
+        //            {
+        //                if (isSmallLetter(producciones[i][j]) && !minusculasActuales.Contains(producciones[i][j] + ""))
+        //                {
+        //                    minusculasActuales.Add(producciones[i][j] + "");
+        //                }
+        //            }
+        //        }
                 
-            }
+        //    }
             
                 
-            return minusculasActuales;
+        //    return minusculasActuales;
 
-        }
-
+        //}
+        /**
+         * Metodo usado para eliminar las producciones no alcanzables
+         */
         public void removerProduccion(String eliminar)
         {
             for (int i = 0; i < producciones.Count; i++)
@@ -73,6 +75,9 @@ namespace CFGtoCNF
                 }
             }
         }
+        /**
+         * Método para saber si se puede alcanzar a una variable pasada por parámetro
+         */
         public bool canReach(String valor)
         {
             bool result = false;
@@ -144,6 +149,9 @@ namespace CFGtoCNF
 
             return result;
         }
+        /**
+         * Método para saber si una producción tiene un terminal
+         */
          public bool haveTerminal()
         {
             bool result = false;
@@ -179,6 +187,9 @@ namespace CFGtoCNF
         }
 
         //Anulables
+        /**
+         * Metodo usado para saber si la produccion tiene lambda
+         */
         public bool haveLambda()
         {
 
@@ -190,7 +201,9 @@ namespace CFGtoCNF
             }
             return false;
         }
-
+        /**
+         * Metodo para reemplazar las anulables
+         */
         public void replaceByOneAnulable(String anulable) {
             for (int i = 0; i < producciones.Count; i++) {
                 for (int j = 0; j < producciones[i].Length; j++) {
@@ -262,6 +275,9 @@ namespace CFGtoCNF
         //}
 
         //Unitarias
+        /**
+         * Método que da las variables unitarias que tiene la produccón
+         */
         public StringCollection Unitarias()
         {
 			StringCollection unitarias = new StringCollection();
@@ -276,6 +292,11 @@ namespace CFGtoCNF
 
             return unitarias;
         }
+        /**
+         * Método que da las variables unitarias que tiene la produccón
+         * Se usa despues de haber sacado las primeras unitarias
+         * Si ya se han agregado no se agrega la unitaria
+         */
         public StringCollection Unitarias(StringCollection unitarias)
         {
             
@@ -295,6 +316,9 @@ namespace CFGtoCNF
 
             return unitarias;
         }
+        /**
+         * Método que reemplaza las unitarias por las variables de otra producción
+         */
         public void ReemplazarUnitarias(String unitaria, Variable var)
         {
             for (int i = 0; i < producciones.Count; i++)
@@ -354,12 +378,11 @@ namespace CFGtoCNF
         }
 
         //Minusculas/terminables
-        // Lambda es '?'
-        //Las letras minusculas van desde a(97) hasta m(109)
+        // Lambda es '?'        
         public bool isSmallLetter(char digit)
         {
 
-            if ((digit >= 97 && digit <= 109)|| digit == 63)
+            if ((digit >= 97 && digit <= 122)|| digit == 63)
             {
                 return true;
             }
