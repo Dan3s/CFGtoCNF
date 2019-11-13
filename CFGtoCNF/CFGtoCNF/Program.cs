@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -141,16 +142,35 @@ namespace CFGtoCNF
 
             Variable va = new Variable();
             va.producciones = new StringCollection();
+           // va.producciones.Add("BCB");
             va.producciones.Add("BCB");
-            //va.producciones.Add("C");
-            //va.producciones.Add("B");
+            va.producciones.Add("aA/ab");
+            va.producciones.Add("bBa/A/DC");
+            va.producciones.Add("aCb/D/b");
+            va.producciones.Add("aB/?");
+
+            va.replaceByOneAnulable("D");
             va.replaceByOneAnulable("B");
+            va.replaceByOneAnulable("C");
+            va.replaceByOneAnulable("S");
+          
             //va.replaceByOneAnulable("C");
             //va.replaceByOneAnulable("B");
             for (int i = 0; i < va.producciones.Count; i++)
             {
                 Console.WriteLine(va.producciones[i]);
             }
+            //StringBuilder hola = new StringBuilder("hola");
+
+            //hola.Remove(0,1);
+            //hola.Insert(0,"p");
+            //hola.Insert(1, "p");
+            //string a = "abcde";
+            //a.Remove(1);
+            //char [] arra = a.ToCharArray();
+            ////arra[2] = '';
+
+            //Console.WriteLine(a.Remove(1,1));
             Console.ReadKey();
 
 

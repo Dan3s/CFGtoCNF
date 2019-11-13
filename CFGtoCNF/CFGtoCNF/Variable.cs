@@ -9,7 +9,7 @@ namespace CFGtoCNF
     class Variable
     {
         //En cada posicion una produccion de la forma aa ó AA ó aA ó A ó a ó lambda
-        private  StringCollection  producciones;
+        public StringCollection  producciones;
         //Diccionario de minusculas que se van a usar para reemplazar las terminales en la gramática final
         //Va desde n(110) hasta z(122)
         //La llave es la minuscula antigua y el valor la nueva
@@ -193,34 +193,69 @@ namespace CFGtoCNF
 
         public void replaceByOneAnulable(String anulable) {
             for (int i = 0; i < producciones.Count; i++) {
-                for (int j = 0; j < producciones[i].Length; j++) { 
-                if (producciones[i][j].Equals(anulable)) {
-                        string nuevaProduccion = producciones[i].Insert(j, "");
+                for (int j = 0; j < producciones[i].Length; j++) {
+                    String compa = producciones[i][j] + "";
+                    if (compa.Equals(anulable)) {
+                        //String nProduccion = producciones[i];
+                        //nProduccion.Remove(j, j + 1);
+                        StringBuilder nuevaProduccion = new StringBuilder(producciones[i].Remove(j,1));
+                        nuevaProduccion.Insert(j, "");
 
-                        if (producciones[i].Equals(nuevaProduccion))
+
+                        
+                        if (!producciones.Contains(nuevaProduccion.ToString()))
                         {
-                            continue;
+                            producciones.Add(nuevaProduccion.ToString());
+
                         }
-                        else {
-                            producciones.Add(nuevaProduccion);
-                        }
-                }
+                       
+                            
+                        
+                    }
                 }
             }
         }
 
-        public void replaceAllAnulables(StringCollection anulables) {
-            string produccionSinAnulables = "";
-            for (int i = 0; i < producciones.Count; i++) {
-                produccionSinAnulables = producciones[i];
-                for (int j = 0; j < produccionSinAnulables.Length; j++) {
-                    if (anulables.Contains(""+ produccionSinAnulables[j]) ){
-                        produccionSinAnulables.Insert(j, "");
+        public void replaceAllAnulables(String anulables)
+        {
+            string produccion = "";
+            string pro = producciones.ToString();
+            for (int i = 0; i < producciones.Count; i++)
+            {
+                produccion = producciones[i];
+                for (int j = 0; j < produccion.Length; j++)
+                {
+                    for (int z = 0; z < anulables.Length; z++)
+                    {
+                        if (anulables[z].ToString().Equals(produccion[j]))
+                        {
+                            produccion.Insert(j, "");
+                        }
                     }
+
+
+
                 }
-                
-            } 
+
+            }
+
+            if (!producciones.Contains(produccion))
+            {
+                addProduction(produccion);
+            }
         }
+
+        //private string changeCharacter(StringCollection cad, string value)
+        //{
+        //    cad.re
+        //    for (int i = 0; i < cad.Count; i++)
+        //    {
+        //        if (cad[i] == value[0])
+        //        {
+
+        //        }
+        //    }
+        //}
 
         //Unitarias
         public StringCollection Unitarias()
