@@ -148,6 +148,8 @@ namespace CFGtoCNF
         private void button3_Click(object sender, EventArgs e)
         {
             textBox2.Text = "";
+            textBox1.Text = "";
+            g = new Grammar();
         }
     }
 }

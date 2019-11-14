@@ -155,7 +155,7 @@ namespace CFGtoCNF
             Dictionary<String, String> alcanzables = new Dictionary<string, string>();
             Dictionary<String, String> alcanzables2 = new Dictionary<String, String>();
             //S siempre va a ser alcanzable
-            alcanzables.Add("S", "S");
+            ///alcanzables.Add("S", "S");
             
             bool equal = false;
 
