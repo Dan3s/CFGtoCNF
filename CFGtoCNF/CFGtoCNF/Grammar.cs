@@ -13,12 +13,14 @@ namespace CFGtoCNF
         public Grammar actualGrammar;
         public Dictionary<string, Variable> variables;
         public Dictionary<string, string> letras;
+        public string primera;
 
 
         public Grammar(){
             variables = new Dictionary<string, Variable>();
             letras = new Dictionary<string, string>();
             //actualGrammar = new Grammar();
+            primera = "no";
 
         }
 
@@ -35,6 +37,10 @@ namespace CFGtoCNF
             if (!letras.ContainsKey(key))
             {
                 letras.Add(key, key);
+            }
+            if (primera.Equals("no"))
+            {
+                primera = key;
             }
             String[] cad = pro.Split('/');
             Variable variable = new Variable();
@@ -154,9 +160,10 @@ namespace CFGtoCNF
         {
             Dictionary<String, String> alcanzables = new Dictionary<string, string>();
             Dictionary<String, String> alcanzables2 = new Dictionary<String, String>();
-            //S siempre va a ser alcanzable
+            //La primera siempre va a ser alcanzable
             ///alcanzables.Add("S", "S");
-            
+            alcanzables.Add(primera, primera);
+
             bool equal = false;
 
             while (!equal)
