@@ -323,18 +323,22 @@ namespace CFGtoCNF
         {
             for (int i = 0; i < producciones.Count; i++)
             {
-                String compa = producciones[i][0] + "";
-                if (producciones[i].Length == 1 && isBigLetter(producciones[i][0]) && compa.Equals(unitaria))
+                if (producciones[i].Length > 0)
                 {
-                    producciones.RemoveAt(i);
-                    
-                    for (int j = 0; j < var.GetProducciones().Count; j++)
+                    String compa = producciones[i][0] + "";
+                    if (producciones[i].Length == 1 && isBigLetter(producciones[i][0]) && compa.Equals(unitaria))
                     {
-                        producciones.Add(var.GetProducciones()[j]);
-                    }
-                    
+                        producciones.RemoveAt(i);
 
+                        for (int j = 0; j < var.GetProducciones().Count; j++)
+                        {
+                            producciones.Add(var.GetProducciones()[j]);
+                        }
+
+
+                    }
                 }
+                
             }
         }
 

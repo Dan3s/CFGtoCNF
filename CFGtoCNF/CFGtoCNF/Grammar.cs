@@ -76,8 +76,10 @@ namespace CFGtoCNF
                 }
                 if (entry.Value.haveLambda())
                 {
-                    
-                    terminales1.Add(entry.Key, entry.Key);
+                    if (!terminales1.ContainsKey(entry.Key))
+                    {
+                        terminales1.Add(entry.Key, entry.Key);
+                    }
                 }
             }
 
